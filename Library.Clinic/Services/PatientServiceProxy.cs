@@ -1,6 +1,7 @@
 ﻿using Library.Clinic.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,12 @@ namespace Library.Clinic.Services   //behavior role, where the behavior for the 
         private PatientServiceProxy()
         {
             instance = null;
+
+            Patients = new List<Patient>
+            {
+                new Patient{Id = 1, Name = "John Doe"}
+                , new Patient{Id = 2, Name = "Jane Doe"}
+            };
         }
         public int LastKey
         {
@@ -42,9 +49,25 @@ namespace Library.Clinic.Services   //behavior role, where the behavior for the 
                 return 0;
             }
         }
+
+        private List<Patient> patients;
         //field version: List<Patient> patients;
         //singleton
-        public List<Patient> Patients { get; private set; } = new List<Patient>();
+        public List<Patient> Patients
+        {
+            get
+            {
+                return patients;
+                //make sure hitting break point
+            }
+            private set
+            {
+                if (patients != value)
+                {
+                    patients = value;
+                }
+            }
+        }
         /*public PatientServiceProxy() 
         {
             patients = new List<Patient>();  //need to add patients into on master list, static is one way to do it

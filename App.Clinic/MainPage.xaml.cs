@@ -1,4 +1,5 @@
-﻿namespace App.Clinic
+﻿
+namespace App.Clinic
 {
     public partial class MainPage : ContentPage
     {

@@ -9,6 +9,10 @@ namespace Library.Clinic.Models
 {
     public class Patient
     {
+        public override string ToString()
+        {
+            return $"[{Id}] {Name}";
+        }
         public int Id { get; set; } 
         //Guid puts in a hash function, don't have to check for collisons, easier to troubleshoot with in ID's 
         private string? name;  //field, data member 
