@@ -35,7 +35,7 @@ namespace Library.Clinic.Models
 
         public Patient()
         {
-            name = string.Empty;
+            Name = string.Empty;
             Address = string.Empty;
             Birthday = DateTime.MinValue;
             SSN = string.Empty;

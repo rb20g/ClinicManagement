@@ -1,6 +1,6 @@
 
 using Library.Clinic.Models;
-using Library.Clinic.Service;
+using Library.Clinic.Services;
 namespace App.Clinic.Views;
 
 public partial class PatientManagement : ContentPage

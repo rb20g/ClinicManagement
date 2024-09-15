@@ -63,6 +63,10 @@ namespace MyApp
                         case 'U':
                             break;
 
+                        case 'r':
+                        case 'R':
+                            break;
+
                         case 'q':
                         case 'Q':
                             isContinue = false;
