@@ -73,13 +73,18 @@ namespace Library.Clinic.Services   //behavior role, where the behavior for the 
             patients = new List<Patient>();  //need to add patients into on master list, static is one way to do it
         }*/
 
-        public void AddPatient(Patient patient) //responsible for constructing the list, but the application is responsible for constructing the individual objects 
+        public void AddOrUpdatePatient(Patient patient) //responsible for constructing the list, but the application is responsible for constructing the individual objects 
         {
+            bool isAdd = false;
             if (patient.Id <= 0)
             {
                 patient.Id = LastKey + 1;              //if added the patient before, will add it again, but if never added patient before, the ID is always going to be 0, actually assign it a new 0 
+                isAdd = true;
             }
-            Patients.Add(patient);
+            if (isAdd)
+            {
+                patients.Add(patient);
+            }
         }
 
         public void DeletePatient(int id)

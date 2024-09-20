@@ -49,7 +49,7 @@ namespace MyApp
                         case 'A':
                             var name = Console.ReadLine();  //need to decouple the list from the application
                             var newPatient = new Patient { Name = name ?? string.Empty };
-                            PatientServiceProxy.Current.AddPatient(newPatient);
+                            PatientServiceProxy.Current.AddOrUpdatePatient(newPatient);
                             break;
 
                         case 'd':
@@ -61,6 +61,10 @@ namespace MyApp
 
                         case 'u':
                         case 'U':
+                            break;
+
+                        case 'r':
+                        case 'R':
                             break;
 
                         case 'q':
