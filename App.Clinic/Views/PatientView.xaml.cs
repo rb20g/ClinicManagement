@@ -35,7 +35,7 @@ public partial class PatientView : ContentPage
         Shell.Current.GoToAsync("//Patients");
     }
 
-	private void PatientView_NavigatedTo(object sender, NavigationEventArgs e)
+	private void PatientView_NavigatedTo(object sender, NavigatedToEventArgs e)
 	{
 		BindingContext = new Patient(); 
 		//allowed us to delegate where binding actually happened, will automatically refresh the contents of the BindingContext that will be bound by the name

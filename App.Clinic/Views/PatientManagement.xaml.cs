@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using App.Clinic.ViewModels;
 namespace App.Clinic.Views;
 
-public partial class PatientManagement : ContentPage, INotifyPropertyChanged
+public partial class PatientManagement : ContentPage // after : is interfaces 
 //INotifyProperyChanged will help us figure out when a property on the BindingContext has actually changed, such that we can refresh and sort it out
 {
 
@@ -29,9 +29,11 @@ public partial class PatientManagement : ContentPage, INotifyPropertyChanged
         Shell.Current.GoToAsync("//PatientDetails");
     }
 
-	private void PatientManagement_NavigatedTo(object sender, NavigationEventArgs e)
+	private void PatientManagement_NavigatedTo(object sender, NavigatedToEventArgs e) 
 	{
-		(BindingContext as PatientManagementViewModel)?.Refresh(); //want to separate view from everything else, we get to the view model by 
+		(BindingContext as PatientManagementViewModel)?.Refresh(); 
+		//want to separate view from everything else, we get to the view model by setting BindingConext as PatientManagementViewModel
+		//will produce null if not a PatientManagementViewModel 
 		//NotifyPropertyChanged("Patients"); this will raise the PropertyChanged event, but it wont work cause it will raise the hidden PropertyChanged event on the base class instead
 	}
 
