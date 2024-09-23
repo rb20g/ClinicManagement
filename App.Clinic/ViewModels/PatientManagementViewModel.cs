@@ -12,10 +12,12 @@ using Library.Clinic.Services;
 namespace App.Clinic.ViewModels
 {
     public class PatientManagementViewModel : INotifyPropertyChanged  //always want to use changed, not changing
+    //always want ViewModels to be public because it's their job for other things to ask them to do something or provide some data
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") 
+        //the parameter tells maui which one of the properties should be investigated, tells what to refresh
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -25,6 +27,7 @@ namespace App.Clinic.ViewModels
             get
             {
                 return new ObservableCollection<Patient>(PatientServiceProxy.Current.Patients);
+                //ObservableCollection rasies its own property notification events, 
             }
         }
 
