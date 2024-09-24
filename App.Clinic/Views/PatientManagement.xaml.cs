@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 using App.Clinic.ViewModels;
 namespace App.Clinic.Views;
 
-public partial class PatientManagement : ContentPage // after : is interfaces 
+public partial class PatientManagement : ContentPage, INotifyPropertyChanged // after : is interfaces 
 //INotifyProperyChanged will help us figure out when a property on the BindingContext has actually changed, such that we can refresh and sort it out
 {
 
@@ -26,13 +26,21 @@ public partial class PatientManagement : ContentPage // after : is interfaces
 
 	private void AddClicked(object sender, EventArgs e)
 	{
-        Shell.Current.GoToAsync("//PatientDetails");
+        Shell.Current.GoToAsync("//PatientDetails?patientId=0");
     }
 
-	private void DeleteClicked(object sender, EventArgs e)
+    private void EditClicked(object sender, EventArgs e)
+    {
+		var selectedPatientId = (BindingContext as PatientManagementViewModel)?
+			.SelectedPatient?.Id ?? 0;
+        Shell.Current.GoToAsync($"//PatientDetails?patientId={selectedPatientId}");
+    }
+
+    private void DeleteClicked(object sender, EventArgs e)
 	{
 		(BindingContext as PatientManagementViewModel)?.Delete();
 	}
+
 
 	private void PatientManagement_NavigatedTo(object sender, NavigatedToEventArgs e) 
 	{
@@ -42,6 +50,7 @@ public partial class PatientManagement : ContentPage // after : is interfaces
 		//NotifyPropertyChanged("Patients"); this will raise the PropertyChanged event, but it wont work cause it will raise the hidden PropertyChanged event on the base class instead
 	}
 
+  
 }
 
 //MVVM is an archetecterial model, stands for Model View View Model, 

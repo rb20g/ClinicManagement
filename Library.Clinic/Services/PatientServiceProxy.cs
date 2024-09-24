@@ -80,6 +80,9 @@ namespace Library.Clinic.Services   //behavior role, where the behavior for the 
             {
                 patient.Id = LastKey + 1;              //if added the patient before, will add it again, but if never added patient before, the ID is always going to be 0, actually assign it a new 0 
                 isAdd = true;
+                //this explicitly tells when something should be added or not, we go into the function with an assumption that this is an updated
+                //if we are proven wrong (that is if the Id is something 0 or less than 0) we are going to assign an Id, and at the point of 
+                //assigning a Id, we know that this is an Add, and we need to put a new thing into the list
             }
             if (isAdd)
             {

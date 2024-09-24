@@ -4,7 +4,8 @@ using System.ComponentModel;
 namespace App.Clinic.Views;
 
 
-[QueryProperty(nameof(PatientId), "patientId")]
+[QueryProperty(nameof(PatientId), "patientId")]  
+//a descripter, looks for a route parameter named "patientId" and it's going to grab whatever's after the equal sign and put that into the property called PatientId
 public partial class PatientView : ContentPage
 { 
 	public PatientView()
@@ -37,8 +38,18 @@ public partial class PatientView : ContentPage
 
 	private void PatientView_NavigatedTo(object sender, NavigatedToEventArgs e)
 	{
-		BindingContext = new Patient(); 
-		//allowed us to delegate where binding actually happened, will automatically refresh the contents of the BindingContext that will be bound by the name
+		//TODO task: this really needs to be in a view model, below is not best practice
+		if(PatientId > 0)
+		{
+            BindingContext = PatientServiceProxy.Current
+				.Patients.FirstOrDefault(p => p.Id == PatientId); 
+			//FirstOrDefault() makes it so the first patient in the list appears in the text box when first going to add or edit on PatientView page
+            //Allowed us to delegate where binding actually happened, will automatically refresh the contents of the BindingContext that will be bound by the name
+        }
+		else
+		{
+			BindingContext = new Patient();
+		}
 
-	}
+    }
 }

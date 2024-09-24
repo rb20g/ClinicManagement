@@ -46,7 +46,12 @@ namespace App.Clinic.ViewModels
 
         public void Refresh()
         {
-            NotifyPropertyChanged(nameof(Patients));
+            NotifyPropertyChanged(nameof(Patients));  //makes it so if the name is changed, it will produce a complation error, this is best practice
+
+            //NotifyPropertyChanged("Patients");
+            //the string "Patients" is a magic string because we don't necessarily understand what it is 
+            //if public ObservableCollection<Patient> Patients wasn't there or the name was changed, Delete and Create will work on the back end, but won't work on the fornt end
+            //won't get compliation error either since the string "Patients" would still be a legitimate string but would not be pointing to the correct property 
         }
     }
 
