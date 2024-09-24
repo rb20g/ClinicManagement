@@ -29,6 +29,11 @@ public partial class PatientManagement : ContentPage // after : is interfaces
         Shell.Current.GoToAsync("//PatientDetails");
     }
 
+	private void DeleteClicked(object sender, EventArgs e)
+	{
+		(BindingContext as PatientManagementViewModel)?.Delete();
+	}
+
 	private void PatientManagement_NavigatedTo(object sender, NavigatedToEventArgs e) 
 	{
 		(BindingContext as PatientManagementViewModel)?.Refresh(); 
