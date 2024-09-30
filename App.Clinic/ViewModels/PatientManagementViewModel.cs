@@ -22,13 +22,21 @@ namespace App.Clinic.ViewModels
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public Patient? SelectedPatient { get; set; }
+        public PatientViewModel? SelectedPatient { get; set; }
 
-        public ObservableCollection<Patient> Patients
+        public ObservableCollection<PatientViewModel> Patients
         {
             get
             {
-                return new ObservableCollection<Patient>(PatientServiceProxy.Current.Patients);
+                return new ObservableCollection<PatientViewModel>(
+                    PatientServiceProxy
+                    .Current
+                    .Patients
+                    .Where(p=>p != null)                     //where is a saftey belt that tells it to only grab things that are not null from the patient service proxy 
+                    .Select(p => new PatientViewModel(p))    //select is saying take each one of those things from where and make a new PatientViewModel out of that thing
+                    );
+                
+                
                 //ObservableCollection rasies its own property notification events, 
             }
         }
@@ -39,7 +47,7 @@ namespace App.Clinic.ViewModels
             {
                 return;
             }
-            PatientServiceProxy.Current.DeletePatient(SelectedPatient.Id);
+            PatientServiceProxy.Current.DeletePatient(SelectedPatient.Model.Id);
 
             Refresh();
         }
