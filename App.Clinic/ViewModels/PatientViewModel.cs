@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using App.Clinic.Views;
 using Library.Clinic.Models;
 using Library.Clinic.Services;
@@ -12,6 +13,8 @@ namespace App.Clinic.ViewModels
     public class PatientViewModel
     {
         public Patient? Model { get; set; }
+        public ICommand DeleteCommand { get; set; }
+       
 
         public int Id
         {
@@ -46,15 +49,29 @@ namespace App.Clinic.ViewModels
             }
         }
 
+        public void SetupCommands()
+        {
+            DeleteCommand = new Command(DoDelete);
+        }
+
+        public void DoDelete()
+        {
+            if(Id > 0)
+            PatientServiceProxy.Current.DeletePatient(Id);
+            Shell.Current.GoToAsync("//Patients");
+        }
+
         public PatientViewModel()
         {
             Model = new Patient();
             //now if Model is null, we know something went wrong
+            SetupCommands();
         }
 
         public PatientViewModel(Patient? _model) //conversion constructer for Patient Model to PatientViewModel
         {
             Model = _model;
+            SetupCommands();
         }
 
         public void ExecuteAdd()

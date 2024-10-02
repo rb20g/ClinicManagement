@@ -50,6 +50,11 @@ public partial class PatientManagement : ContentPage, INotifyPropertyChanged // 
 		//NotifyPropertyChanged("Patients"); this will raise the PropertyChanged event, but it wont work cause it will raise the hidden PropertyChanged event on the base class instead
 	}
 
+	private void RefreshClicked(object sender, EventArgs e)
+	{
+		(BindingContext as PatientManagementViewModel)?.Refresh();
+	}
+
   
 }
 
