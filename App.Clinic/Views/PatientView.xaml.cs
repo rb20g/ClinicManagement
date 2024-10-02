@@ -1,3 +1,4 @@
+using App.Clinic.ViewModels;
 using Library.Clinic.Models;
 using Library.Clinic.Services;
 
@@ -25,6 +26,7 @@ public partial class PatientView : ContentPage
 
 	private void AddClicked(object sender, EventArgs e)
 	{
+		/*
 		var patientToAdd = BindingContext as Patient;
 
         if (patientToAdd != null)
@@ -33,22 +35,34 @@ public partial class PatientView : ContentPage
             .Current
             .AddOrUpdatePatient(patientToAdd);
         }
-        Shell.Current.GoToAsync("//Patients");
+        Shell.Current.GoToAsync("//Patients");*/
+
+		(BindingContext as PatientViewModel)?.ExecuteAdd();
     }
 
 	private void PatientView_NavigatedTo(object sender, NavigatedToEventArgs e)
 	{
 		//TODO task: this really needs to be in a view model, below is not best practice
-		if(PatientId > 0)
+		if (PatientId > 0)
 		{
-            BindingContext = PatientServiceProxy.Current
-				.Patients.FirstOrDefault(p => p.Id == PatientId); 
+			var model = PatientServiceProxy.Current
+				.Patients.FirstOrDefault(p => p.Id == PatientId);
 			//FirstOrDefault() makes it so the first patient in the list appears in the text box when first going to add or edit on PatientView page
-            //Allowed us to delegate where binding actually happened, will automatically refresh the contents of the BindingContext that will be bound by the name
-        }
+			//Allowed us to delegate where binding actually happened, will automatically refresh the contents of the BindingContext that will be bound by the name
+
+			if (model != null)
+			{
+				BindingContext = new PatientViewModel(model);
+			}
+			else
+			{
+				BindingContext = new PatientViewModel();
+			}
+		}
+
 		else
 		{
-			BindingContext = new Patient();
+			BindingContext = new PatientViewModel();
 		}
 
     }

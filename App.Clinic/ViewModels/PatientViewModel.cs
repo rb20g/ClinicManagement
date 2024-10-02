@@ -56,5 +56,17 @@ namespace App.Clinic.ViewModels
         {
             Model = _model;
         }
+
+        public void ExecuteAdd()
+        {
+            if (Model != null)
+            {
+                PatientServiceProxy
+                    .Current
+                    .AddOrUpdatePatient(Model);
+            }
+
+            Shell.Current.GoToAsync("//Patients");
+        }
     }
 }
