@@ -7,6 +7,14 @@
              >
 
     <VerticalStackLayout>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="12*" />
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Entry Grid.Column="0" />
+            <Button Grid.Column="1" Text="Search"/>
+        </Grid>
         <ListView
             ItemsSource="{Binding Patients}"
             SelectedItem="{Binding SelectedPatient}"
