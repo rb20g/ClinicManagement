@@ -36,6 +36,7 @@ namespace App.Clinic.ViewModels
                     .Patients
                     .Where(p => p != null)                     //where is a saftey belt that tells it to only grab things that are not null from the patient service proxy 
                     .Where(p => p.Name.ToUpper().Contains(Query?.ToUpper() ?? string.Empty))
+                    .Take(100)
                     .Select(p => new PatientViewModel(p))    //select is saying take each one of those things from where and make a new PatientViewModel out of that thing
                     );
                 
