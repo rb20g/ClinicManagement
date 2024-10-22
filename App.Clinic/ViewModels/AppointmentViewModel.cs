@@ -31,6 +31,31 @@ namespace App.Clinic.ViewModels
                 return Model?.Patient?.Name ?? string.Empty;
             }
         }
+        public Patient? SelectedPatient
+        {
+            get
+            {
+                return Model?.Patient;
+            }
+
+            set
+            {
+                var selectedPatient = value;
+                if (Model != null)
+                {
+                    Model.Patient = selectedPatient;
+                    Model.PatientId = selectedPatient?.Id ?? 0;
+                }
+
+            }
+        }
+        public ObservableCollection<Patient> Patients
+        {
+            get
+            {
+                return new ObservableCollection<Patient>(PatientServiceProxy.Current.Patients);
+            }
+        }
 
         public AppointmentViewModel()
         {
@@ -41,5 +66,13 @@ namespace App.Clinic.ViewModels
             Model = a;
         }
 
+        public void AddOrUpdate()
+        {
+            if(Model != null)
+            {
+                AppointmentServiceProxy.Current.AddOrUpdate(Model);
+            }
+            
+        }
     }
 }

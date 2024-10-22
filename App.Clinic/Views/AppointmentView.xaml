@@ -5,8 +5,14 @@
              Title="AppointmentView">
     <VerticalStackLayout>
         <Label Text="Patient"/>
-        <Picker 
+        <Picker
+            ItemsSource="{Binding Patients}"
+            SelectedItem="{Binding SelectedPatient}"
             />
+        <Label Text="Appointment Start"/>
+        <DatePicker Date="{Binding StartDate}" MinimumDate="{Binding MinStartDate}"/>
+        
+        <Button Text="Ok" Clicked="OkClicked" />
         <Button Text="Cancel" Clicked="CancelClicked"/>
     </VerticalStackLayout>
 </ContentPage>
