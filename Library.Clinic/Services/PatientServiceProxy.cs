@@ -84,7 +84,7 @@ namespace Library.Clinic.Services   //behavior role, where the behavior for the 
                 //if we are proven wrong (that is if the Id is something 0 or less than 0) we are going to assign an Id, and at the point of 
                 //assigning a Id, we know that this is an Add, and we need to put a new thing into the list
             }
-            if (isAdd)
+            if (isAdd)  //need isAdd if statement since as we go on updates are going to get more complicated and could mess up the id setting 
             {
                 patients.Add(patient);
             }
