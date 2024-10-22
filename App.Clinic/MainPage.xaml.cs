@@ -19,6 +19,10 @@ namespace App.Clinic
             //feature branches should only last a day, should be named with the issue number and a descripter 
 
         }
+        private void AppointmentsClicked(object sender, EventArgs e)
+        {
+            Shell.Current.GoToAsync("//Appointments");
+        }
 
     }
 
