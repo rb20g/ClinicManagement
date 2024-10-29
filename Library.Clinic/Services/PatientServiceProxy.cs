@@ -1,10 +1,14 @@
 ﻿using Library.Clinic.Models;
+using PP.Library.Utilities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using Library.Clinic.DTO;
 
 namespace Library.Clinic.Services   //behavior role, where the behavior for the data goes
 {
@@ -32,11 +36,15 @@ namespace Library.Clinic.Services   //behavior role, where the behavior for the 
         {
             instance = null;
 
-            Patients = new List<Patient>
+            var patientsData = new WebRequestHandler().Get("/Patient").Result;   // all you need is /Patient because the rest is already in the WebRequestHandler
+
+            Patients = JsonConvert.DeserializeObject<List<PatientDTO>>(patientsData) ?? new List<PatientDTO>();
+
+                /*new List<Patient>
             {
                 new Patient{Id = 1, Name = "John Doe"}
                 , new Patient{Id = 2, Name = "Jane Doe"}
-            };
+            };*/
         }
         public int LastKey
         {
@@ -50,10 +58,10 @@ namespace Library.Clinic.Services   //behavior role, where the behavior for the 
             }
         }
 
-        private List<Patient> patients;
+        private List<PatientDTO> patients;
         //field version: List<Patient> patients;
         //singleton
-        public List<Patient> Patients
+        public List<PatientDTO> Patients
         {
             get
             {
@@ -73,7 +81,7 @@ namespace Library.Clinic.Services   //behavior role, where the behavior for the 
             patients = new List<Patient>();  //need to add patients into on master list, static is one way to do it
         }*/
 
-        public void AddOrUpdatePatient(Patient patient) //responsible for constructing the list, but the application is responsible for constructing the individual objects 
+        public void AddOrUpdatePatient(PatientDTO patient) //responsible for constructing the list, but the application is responsible for constructing the individual objects 
         {
             bool isAdd = false;
             if (patient.Id <= 0)
@@ -86,7 +94,7 @@ namespace Library.Clinic.Services   //behavior role, where the behavior for the 
             }
             if (isAdd)  //need isAdd if statement since as we go on updates are going to get more complicated and could mess up the id setting 
             {
-                patients.Add(patient);
+                Patients.Add(patient);
             }
         }
 

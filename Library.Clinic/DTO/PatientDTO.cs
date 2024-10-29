@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.Clinic.Models
-    //Models are like a row in a data table, where this row will separate the name, birthday, address, and ssn of the patients into separate columns
+namespace Library.Clinic.DTO
 {
-    public class Patient
+    public class PatientDTO
     {
         public override string ToString()
         {
@@ -23,15 +22,14 @@ namespace Library.Clinic.Models
             }
         }
         public int Id { get; set; }
-        //Guid puts in a hash function, don't have to check for collisions, easier to troubleshoot with in ID's 
-
-        public string? Name { get; set; }     //a property is a member of the class that provides an abstraction to set (write) and get (read) the calue of a private field
+        
+        public string? Name { get; set; }
 
         public DateTime Birthday { get; set; }
         public string Address { get; set; }
         public string SSN { get; set; }
 
-        public Patient()
+        public PatientDTO()
         {
             Name = string.Empty;
             Address = string.Empty;
