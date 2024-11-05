@@ -32,7 +32,7 @@ namespace Api.Clinic.Database
             }
         }
 
-        public static Patient? AddOrUpdate(Patient? patient)
+        public static Patient? AddOrUpdatePatient(Patient? patient)
         {
             if (patient == null)
             {

@@ -1,5 +1,6 @@
 ﻿using Api.Clinic.Database;
 using Library.Clinic.Models;
+using Library.Clinic.DTO;
 
 namespace Api.Clinic.Enterprise
 {
@@ -7,34 +8,46 @@ namespace Api.Clinic.Enterprise
     {
         public PatientEC() { }
 
-        public IEnumerable<Patient> Patients   // NO STATIC FUNCTIONS IN ENTERPRISES, making the ability to do behaviors static
+        public IEnumerable<PatientDTO> Patients   // NO STATIC FUNCTIONS IN ENTERPRISES, making the ability to do behaviors static
         {
             get
             {
-                return FakeDatabase.Patients;
+                return FakeDatabase.Patients.Take(100).Select(p => new PatientDTO(p));
             }
             
         }
 
-        public Patient? GetById(int id)
+        public PatientDTO? GetById(int id)
         {
-            return FakeDatabase.Patients.FirstOrDefault(p => p.Id == id);
+            var patient = FakeDatabase
+                .Patients
+                .FirstOrDefault(p => p.Id == id);
+            if(patient != null)
+            {
+                return new PatientDTO(patient);
+            }
+            return null;
         }
 
-        public Patient? Delete(int id)
+        public PatientDTO? Delete(int id)
         {
             var patientToDelete = FakeDatabase.Patients.FirstOrDefault(p => p.Id == id);
             if (patientToDelete != null)
             {
                 FakeDatabase.Patients.Remove(patientToDelete);
+                return new PatientDTO(patientToDelete); // return deleted object for undo function
             }
 
-            return patientToDelete;   // return deleted object for undo function
+            return null;  
         }
 
-        public Patient? AddOrUpdate(Patient? patient)
+        public Patient? AddOrUpdate(PatientDTO? patient)
         {
-            return FakeDatabase.AddOrUpdate(patient);
+            if (patient == null)
+            {
+                return null;
+            }
+            return FakeDatabase.AddOrUpdatePatient(new Patient(patient));
         }
     }
 }

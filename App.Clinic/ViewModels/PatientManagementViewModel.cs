@@ -51,7 +51,7 @@ namespace App.Clinic.ViewModels
             {
                 return;
             }
-            PatientServiceProxy.Current.DeletePatient(SelectedPatient.Model.Id);
+            PatientServiceProxy.Current.DeletePatient(SelectedPatient.Id);
 
             Refresh();
         }

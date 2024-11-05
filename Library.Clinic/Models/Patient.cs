@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Library.Clinic.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,6 +38,15 @@ namespace Library.Clinic.Models
             Address = string.Empty;
             Birthday = DateTime.MinValue;
             SSN = string.Empty;
+        }
+
+        public Patient(PatientDTO p)
+        {
+            Id = p.Id;
+            Name = p.Name;
+            Birthday = p.Birthday;
+            Address = p.Address;
+            SSN = p.SSN;
         }
     }
 }

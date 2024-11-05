@@ -59,7 +59,6 @@ public partial class PatientView : ContentPage
 				BindingContext = new PatientViewModel();
 			}
 		}
-
 		else
 		{
 			BindingContext = new PatientViewModel();

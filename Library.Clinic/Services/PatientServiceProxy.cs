@@ -1,14 +1,13 @@
-﻿using Library.Clinic.Models;
-using PP.Library.Utilities;
+﻿using Library.Clinic.DTO;
+using Library.Clinic.Models;
 using Newtonsoft.Json;
+using PP.Library.Utilities;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using System.Text;
-using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using Library.Clinic.DTO;
 
 namespace Library.Clinic.Services   //behavior role, where the behavior for the data goes
 {
@@ -81,9 +80,10 @@ namespace Library.Clinic.Services   //behavior role, where the behavior for the 
             patients = new List<Patient>();  //need to add patients into on master list, static is one way to do it
         }*/
 
-        public void AddOrUpdatePatient(PatientDTO patient) //responsible for constructing the list, but the application is responsible for constructing the individual objects 
+
+        public async Task<PatientDTO?> AddOrUpdatePatient(PatientDTO patient) //responsible for constructing the list, but the application is responsible for constructing the individual objects 
         {
-            bool isAdd = false;
+            /*bool isAdd = false;
             if (patient.Id <= 0)
             {
                 patient.Id = LastKey + 1;              //if added the patient before, will add it again, but if never added patient before, the ID is always going to be 0, actually assign it a new 0 
@@ -95,17 +95,41 @@ namespace Library.Clinic.Services   //behavior role, where the behavior for the 
             if (isAdd)  //need isAdd if statement since as we go on updates are going to get more complicated and could mess up the id setting 
             {
                 Patients.Add(patient);
+            }*/
+
+            var payload = await new WebRequestHandler().Post("/patient", patient);
+            var newPatient = JsonConvert.DeserializeObject<PatientDTO>(payload);
+            if (newPatient != null && newPatient.Id > 0 && patient.Id == 0)
+            {
+                //new patient to be added to the list
+                Patients.Add(newPatient);
             }
+            else if (newPatient != null && patient != null && patient.Id > 0 && patient.Id == newPatient.Id)
+            {
+                //edit, exchange the object in the list
+                var currentPatient = Patients.FirstOrDefault(p => p.Id == newPatient.Id);
+                var index = Patients.Count;
+                if (currentPatient != null)
+                {
+                    index = Patients.IndexOf(currentPatient);
+                    Patients.RemoveAt(index);
+                }
+                Patients.Insert(index, newPatient);
+            }
+
+            return newPatient;
         }
 
-        public void DeletePatient(int id)
+        public async void DeletePatient(int id)
         {
-            var patientToRemove = Patients.FirstOrDefault(p => p.Id == id);  //this grabs the first patient with this idea (and there should only be 1 since they're unique) or default
+            var patientToRemove = Patients.FirstOrDefault(p => p.Id == id);
+
             if (patientToRemove != null)
             {
-                Patients.Remove(patientToRemove);
-            }
+                Patients.Remove(patientToRemove);   //client side
 
+                await new WebRequestHandler().Delete($"/Patient/{id}"); //server side
+            }
         }
     }
 }

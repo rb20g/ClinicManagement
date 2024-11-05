@@ -28,7 +28,8 @@ namespace PP.Library.Utilities
                         .ConfigureAwait(false);
                     return response;
                 }
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
 
             }
@@ -73,18 +74,18 @@ namespace PP.Library.Utilities
             var fullUrl = $"https://{host}:{port}{url}";
             using (var client = new HttpClient())
             {
-                using(var request = new HttpRequestMessage(HttpMethod.Post, fullUrl))
+                using (var request = new HttpRequestMessage(HttpMethod.Post, fullUrl))
                 {
                     var json = JsonConvert.SerializeObject(obj);
-                    using(var stringContent = new StringContent(json, Encoding.UTF8, "application/json"))
+                    using (var stringContent = new StringContent(json, Encoding.UTF8, "application/json"))
                     {
                         request.Content = stringContent;
 
-                        using(var response = await client
+                        using (var response = await client
                             .SendAsync(request, HttpCompletionOption.ResponseHeadersRead)
                             .ConfigureAwait(false))
                         {
-                            if(response.IsSuccessStatusCode)
+                            if (response.IsSuccessStatusCode)
                             {
                                 return await response.Content.ReadAsStringAsync();
                             }

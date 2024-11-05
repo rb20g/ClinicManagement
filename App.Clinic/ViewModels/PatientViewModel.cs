@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using App.Clinic.Views;
+using Library.Clinic.DTO;
 using Library.Clinic.Models;
 using Library.Clinic.Services;
 
@@ -12,7 +13,7 @@ namespace App.Clinic.ViewModels
 {
     public class PatientViewModel
     {
-        public Patient? Model { get; set; }
+        public PatientDTO? Model { get; set; }
         public ICommand? DeleteCommand { get; set; }
         public ICommand? EditCommand { get; set; }
        
@@ -75,27 +76,27 @@ namespace App.Clinic.ViewModels
 
         public PatientViewModel()
         {
-            Model = new Patient();
+            Model = new PatientDTO();
             //now if Model is null, we know something went wrong
             SetupCommands();
         }
 
-        public PatientViewModel(Patient? _model) //conversion constructer for Patient Model to PatientViewModel
+        public PatientViewModel(PatientDTO? _model) //conversion constructer for Patient Model to PatientViewModel
         {
             Model = _model;
             SetupCommands();
         }
 
-        public void ExecuteAdd()
+        public async void ExecuteAdd()
         {
             if (Model != null)
             {
-                PatientServiceProxy
-                    .Current
-                    .AddOrUpdatePatient(Model);
+                await PatientServiceProxy
+                .Current
+                .AddOrUpdatePatient(Model);
             }
 
-            Shell.Current.GoToAsync("//Patients");
+            await Shell.Current.GoToAsync("//Patients");
         }
     }
 }
