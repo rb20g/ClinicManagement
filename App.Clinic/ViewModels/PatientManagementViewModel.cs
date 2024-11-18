@@ -14,12 +14,42 @@ namespace App.Clinic.ViewModels
     public class PatientManagementViewModel : INotifyPropertyChanged  //always want to use changed, not changing
     //always want ViewModels to be public because it's their job for other things to ask them to do something or provide some data
     {
+        public PatientManagementViewModel()
+        {
+            SortChoices = new List<SortChoiceEnum>
+            { 
+                SortChoiceEnum.NameAscending
+                , SortChoiceEnum.NameDescending
+            };
+
+            SortChoice = SortChoiceEnum.NameAscending;     // Keeping us away from cold star issues, could be performance or type safety
+        }
+
         public event PropertyChangedEventHandler? PropertyChanged;
 
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "") 
         //the parameter tells maui which one of the properties should be investigated, tells what to refresh
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public List<SortChoiceEnum> SortChoices { get; set; }
+
+        private SortChoiceEnum sortChoice;
+        public SortChoiceEnum SortChoice
+        {
+            get
+            {
+                return sortChoice;
+            }
+            set
+            {
+                if (sortChoice != value)
+                {
+                    sortChoice = value;
+                    NotifyPropertyChanged("Patients");
+                }
+            }
         }
 
         public PatientViewModel? SelectedPatient { get; set; }
@@ -34,13 +64,23 @@ namespace App.Clinic.ViewModels
                     PatientServiceProxy
                     .Current
                     .Patients
-                    .Where(p => p != null)                     //where is a saftey belt that tells it to only grab things that are not null from the patient service proxy 
-                    .Where(p => p.Name.ToUpper().Contains(Query?.ToUpper() ?? string.Empty))
-                    .Take(100)
-                    .Select(p => new PatientViewModel(p))    //select is saying take each one of those things from where and make a new PatientViewModel out of that thing
+                    .Where(p => p != null)                                                              //where is a saftey belt that tells it to only grab things that are not null from the patient service proxy 
+                    .Where(p => p.Name.ToUpper().Contains(Query?.ToUpper() ?? string.Empty))            // Need take so not grabbing every item in the database at once
+                    .Select(p => new PatientViewModel(p))                                               //select is saying take each one of those things from where and make a new PatientViewModel out of that thing
                     );
+
+                if(SortChoice == SortChoiceEnum.NameAscending)
+                {
+                    return 
+                        new ObservableCollection<PatientViewModel>(retVal.OrderBy(p => p.Name));
+                }
+                else
+                {
+                    return
+                        new ObservableCollection<PatientViewModel>(retVal.OrderByDescending(p => p.Name));
+                }
                 
-                return retVal;
+                //return retVal;
                 //ObservableCollection rasies its own property notification events, 
             }
         }
@@ -64,6 +104,15 @@ namespace App.Clinic.ViewModels
             //the string "Patients" is a magic string because we don't necessarily understand what it is 
             //if public ObservableCollection<Patient> Patients wasn't there or the name was changed, Delete and Create will work on the back end, but won't work on the fornt end
             //won't get compliation error either since the string "Patients" would still be a legitimate string but would not be pointing to the correct property 
+        }
+
+        public async void Search()
+        {
+            if (Query != null)
+            {
+                await PatientServiceProxy.Current.Search(Query);
+            }
+            Refresh();
         }
     }
 

@@ -80,6 +80,16 @@ namespace Library.Clinic.Services   //behavior role, where the behavior for the 
             patients = new List<Patient>();  //need to add patients into on master list, static is one way to do it
         }*/
 
+        public async Task<List<PatientDTO>> Search(string query)
+        {
+            var patientsPayload = await new WebRequestHandler()     //want await for the time spent on the server to unpack the query and apply it to the database, and sending it all back to the client
+                .Post("/Patient/Search", new Query(query));  
+
+            Patients = JsonConvert.DeserializeObject<List<PatientDTO>>(patientsPayload)
+                ?? new List<PatientDTO>();  // trying to optimize time and space, splitting the difference
+
+            return Patients;
+        }
 
         public async Task<PatientDTO?> AddOrUpdatePatient(PatientDTO patient) //responsible for constructing the list, but the application is responsible for constructing the individual objects 
         {

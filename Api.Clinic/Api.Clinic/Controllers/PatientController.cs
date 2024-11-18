@@ -37,6 +37,12 @@ namespace Api.Clinic.Controllers
             return new PatientEC().Delete(id);
         }
 
+        [HttpPost("Search")]
+        public List<PatientDTO> Search([FromBody] Query q)
+        {
+            return new PatientEC().Search(q?.Content ?? string.Empty)?.ToList() ?? new List<PatientDTO>();
+        }
+
         [HttpPost]
         public Patient? AddOrUpdate([FromBody] PatientDTO? patient)  //FromBody: goes to the payload of the post request and automatically deserializes whatever is in the payload and slots it into the function parameter
         {
